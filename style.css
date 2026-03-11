@@ -1,0 +1,243 @@
+/* Custom specific styles overriding or extending Tailwind */
+
+/* Core variables */
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Base Body settings */
+body {
+    background-color: #030014; /* Deep Space Black */
+    color: #ffffff;
+}
+
+/* Glassmorphism Utilities */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* Bento Cards Styling with mouse tracking glow */
+.bento-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.5rem; /* 24px */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mouse tracking border/glow effect */
+.bento-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: inherit;
+    padding: 2px; /* Border thickness */
+    background: radial-gradient(
+        800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(139, 92, 246, 0.4),
+        transparent 40%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bento-card:hover::before {
+    opacity: 1;
+}
+
+/* Inner glow on hover */
+.bento-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(139, 92, 246, 0.08),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.bento-card:hover::after {
+    opacity: 1;
+}
+
+.bento-card:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Tech badge */
+.tech-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tech-badge:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+    color: #fff;
+}
+
+/* Custom Text Glow like Magic UI */
+.glow-text {
+    text-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+/* --- Animations (Framer Motion Mimic) --- */
+.reveal-anim {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-anim.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-100 {
+    transition-delay: 100ms;
+}
+
+.delay-200 {
+    transition-delay: 200ms;
+}
+
+/* Fix Canvas z-index */
+canvas#bg-canvas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: -10;
+}
+
+/* --- ADVANCED SPACE CURSOR --- */
+
+/* 1. Star Core (Dot) */
+#cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 0 10px #00f0ff, 0 0 20px #8B5CF6, 0 0 30px #8B5CF6;
+    transition: transform 0.1s ease-out;
+}
+
+/* 2. HUD Orbit Ring */
+#cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border: 1px dashed rgba(0, 240, 255, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 999;
+    animation: cursorRotate 4s linear infinite;
+    transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+@keyframes cursorRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 3. Small Orbiting "Satellite" on the Ring */
+#cursor-ring::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: #00f0ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00f0ff;
+}
+
+/* 4. Click Effect (Supernova) */
+.click-effect {
+    position: fixed;
+    border: 2px solid #00f0ff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 998;
+    transform: translate(-50%, -50%);
+    animation: supernova 0.6s ease-out forwards;
+}
+
+@keyframes supernova {
+    0% { width: 0; height: 0; opacity: 1; border-width: 4px; }
+    100% { width: 80px; height: 80px; opacity: 0; border-width: 1px; }
+}
+
+/* 5. Space Dust Trail */
+.cursor-trail {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: #8B5CF6;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 997;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+}
+
+/* Hover States for Cursor */
+body.hovering-link #cursor-dot {
+    transform: translate(-50%, -50%) scale(0.5);
+    background-color: #00f0ff;
+}
+
+body.hovering-link #cursor-ring {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #8B5CF6;
+    border-style: solid;
+    animation: cursorRotate 1.5s linear infinite; /* Faster rotation on hover */
+}
+
+/* Large Background Glow */
+#cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: screen;
+}
